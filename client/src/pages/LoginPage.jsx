@@ -15,9 +15,9 @@ export default function LoginPage() {
         email,
         password,
       });
-
-      // Save token
-      localStorage.setItem("token", res.data.token);
+      const decoded = JSON.parse(atob(res.data.token.split('.')[1]));
+localStorage.setItem("token", res.data.token);
+localStorage.setItem("role", decoded.role); // ✅ تخزين الدور
 
       alert("✅ Logged in successfully");
       navigate("/add-product"); // Redirect بعد الدخول
