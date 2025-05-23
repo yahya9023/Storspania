@@ -2,8 +2,10 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AddProductPage from "./pages/AddProductPage"; 
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import ProductsPage from "./pages/ProductsPage"; // ✅ لازم تزيدها
-import ProtectedRoute from "./components/ProtectedRoute"; // ✅ تأكد عندك الملف
+import ProductsPage from "./pages/ProductsPage"; 
+import ProtectedRoute from "./components/ProtectedRoute"; 
+import CartPage from "./pages/CartPage";
+
 
 function App() {
   return (
@@ -13,6 +15,7 @@ function App() {
 
         {/* ✅ صفحة عامة */}
         <Route path="/products" element={<ProductsPage />} />
+        <Route path="/cart" element={<CartPage />} />
 
         {/* ✅ صفحات الدخول */}
         <Route path="/login" element={<LoginPage />} />
