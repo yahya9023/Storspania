@@ -1,22 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const handleAddToCart = (product) => {
-  const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
-
-  const isAlreadyInCart = existingCart.find((item) => item._id === product._id);
-
-  if (isAlreadyInCart) {
-    alert("📦 Already in cart");
-    return;
-  }
-
-  const updatedCart = [...existingCart, { ...product, quantity: 1 }];
-  localStorage.setItem("cart", JSON.stringify(updatedCart));
-  alert("✅ Added to cart!");
-};
-
-
 export default function ProductsPage() {
   const [products, setProducts] = useState([]);
 
@@ -25,12 +9,22 @@ export default function ProductsPage() {
   }, []);
 
   const fetchProducts = async () => {
-    try {
-      const res = await axios.get("http://localhost:5000/api/products");
-      setProducts(res.data);
-    } catch (err) {
-      console.error("❌ Error fetching products:", err);
+    const res = await axios.get("http://localhost:5000/api/products");
+    setProducts(res.data);
+  };
+
+  const handleAddToCart = (product) => {
+    const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+    const isInCart = existingCart.find((item) => item._id === product._id);
+
+    if (isInCart) {
+      alert("📦 Already in cart");
+      return;
     }
+
+    const updatedCart = [...existingCart, { ...product, quantity: 1 }];
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+    alert("✅ Added to cart!");
   };
 
   return (
@@ -38,9 +32,9 @@ export default function ProductsPage() {
       <h2>🛍️ All Products</h2>
 
       <div style={{ display: "flex", flexWrap: "wrap", gap: 20 }}>
-        {products.map((product) => (
+        {products.map((p) => (
           <div
-            key={product._id}
+            key={p._id}
             style={{
               width: 250,
               padding: 10,
@@ -50,31 +44,26 @@ export default function ProductsPage() {
             }}
           >
             <img
-              src={product.image}
-              alt={product.name}
-              style={{ width: "100%", height: 150, objectFit: "cover", borderRadius: 6 }}
+              src={p.image}
+              alt={p.name}
+              style={{
+                width: "100%",
+                height: 150,
+                objectFit: "cover",
+                borderRadius: 6,
+              }}
             />
-            <h3>{product.name}</h3>
-            <p>{product.description}</p>
-            <b>{product.price} MAD</b>
-            <button
-  onClick={() => handleAddToCart(product)}
-  style={{
-    marginTop: 10,
-    padding: "8px 12px",
-    border: "none",
-    borderRadius: 5,
-    backgroundColor: "#00C776",
-    color: "white",
-    cursor: "pointer"
-  }}
->
-  Add to Cart
-</button>
+            <h3>{p.name}</h3>
+            <p>{p.description}</p>
+            <p><b>Stock:</b> {p.stock} unit(s)</p> {/* ✅ عرض الكمية المتوفرة */}
+            <b>{p.price} MAD</b>
 
-            
+            <div style={{ marginTop: 10 }}>
+              <button onClick={() => handleAddToCart(p)}>
+                Add to Cart
+              </button>
+            </div>
           </div>
-          
         ))}
       </div>
     </div>

@@ -5,11 +5,13 @@ import RegisterPage from "./pages/RegisterPage";
 import ProductsPage from "./pages/ProductsPage"; 
 import ProtectedRoute from "./components/ProtectedRoute"; 
 import CartPage from "./pages/CartPage";
+import Navbar from "./components/Navbar";
 
 
 function App() {
   return (
     <Router>
+      <Navbar />
       <Routes>
         <Route path="/" element={<h1>Welcome to Spain Store</h1>} />
 
