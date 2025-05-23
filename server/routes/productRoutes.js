@@ -12,8 +12,20 @@ const router = express.Router();
 
 // ✅ Routes ديال المنتجات
 router.get("/", getProducts);
-router.post("/", protect, isAdmin, createProduct);
-router.put("/:id", protect, isAdmin, updateProduct);
+router.post(
+  "/",
+  protect,
+  isAdmin,
+  upload.array("images", 5), // ✅ دعم رفع حتى 5 صور
+  createProduct
+);
+router.put(
+  "/:id",
+  protect,
+  isAdmin,
+  upload.array("images"), // ⬅️ مهم بزاف!
+  updateProduct
+);
 router.delete("/:id", protect, isAdmin, deleteProduct);
 
 // ✅ Route خاص برفع الصور

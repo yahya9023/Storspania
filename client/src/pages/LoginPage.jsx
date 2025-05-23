@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext"; // ✅ context
+import { toast } from "react-toastify";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { login } = useContext(AuthContext); // ✅ استخدام login من context
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -15,14 +18,22 @@ export default function LoginPage() {
         email,
         password,
       });
-      const decoded = JSON.parse(atob(res.data.token.split('.')[1]));
-localStorage.setItem("token", res.data.token);
-localStorage.setItem("role", decoded.role); // ✅ تخزين الدور
 
-      alert("✅ Logged in successfully");
-      navigate("/add-product"); // Redirect بعد الدخول
+      const decoded = JSON.parse(atob(res.data.token.split('.')[1]));
+
+      // ✅ خزّن info فـ context
+      login(res.data.token, decoded.role);
+
+      toast.success("✅ Logged in successfully");
+
+      // ✅ تحويل حسب الدور
+      if (decoded.role === "admin") {
+        navigate("/add-product");
+      } else {
+        navigate("/products");
+      }
     } catch (err) {
-      alert("❌ Login failed: " + err.response?.data?.msg || err.message);
+      toast.error("❌ Login failed: " + (err.response?.data?.msg || err.message));
     }
   };
 

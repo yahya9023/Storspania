@@ -1,34 +1,15 @@
-import { useEffect, useState } from "react";
+import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
+import { CartContext } from "../context/CartContext";
 
 export default function Navbar() {
-  const [cartCount, setCartCount] = useState(0);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    updateCartCount();
-    checkLogin();
-    window.addEventListener("storage", updateCartCount);
-    return () => window.removeEventListener("storage", updateCartCount);
-  }, []);
-
-  const updateCartCount = () => {
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    const totalQty = cart.reduce((sum, item) => sum + item.quantity, 0);
-    setCartCount(totalQty);
-  };
-
-  const checkLogin = () => {
-    const token = localStorage.getItem("token");
-    setIsLoggedIn(!!token);
-  };
+  const { token, role, logout } = useContext(AuthContext);
+  const { totalCount } = useContext(CartContext);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
-    alert("👋 Logged out");
-    setIsLoggedIn(false);
+    logout();
     navigate("/login");
   };
 
@@ -44,13 +25,22 @@ export default function Navbar() {
       }}
     >
       <Link to="/">🏠 Home</Link>
+
       <div style={{ display: "flex", gap: 20 }}>
         <Link to="/products">🛍️ Products</Link>
-        <Link to="/cart">🛒 Cart ({cartCount})</Link>
+        <Link to="/cart">🛒 Cart ({totalCount})</Link>
 
-        {isLoggedIn ? (
+        {/* ✅ فقط للمشرف */}
+        {role === "admin" && (
           <>
-            <span>👋 Welcome</span>
+            <Link to="/add-product">➕ Add Product</Link>
+            <Link to="/add-category">📂 Add Category</Link> {/* ✅ الزر الجديد */}
+          </>
+        )}
+
+        {token ? (
+          <>
+            <span>👋 {role === "admin" ? "Admin" : "Customer"}</span>
             <button onClick={handleLogout}>Logout</button>
           </>
         ) : (

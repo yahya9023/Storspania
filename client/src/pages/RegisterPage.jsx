@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function RegisterPage() {
   const [form, setForm] = useState({
@@ -19,10 +20,10 @@ export default function RegisterPage() {
 
     try {
       await axios.post("http://localhost:5000/api/auth/register", form);
-      alert("✅ Account created! You can now log in.");
+      toast.success("✅ Account created! You can now log in.");
       navigate("/login");
     } catch (err) {
-      alert("❌ Register failed: " + err.response?.data?.msg || err.message);
+      toast.error("❌ Register failed: " + err.response?.data?.msg || err.message);
     }
   };
 

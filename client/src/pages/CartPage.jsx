@@ -1,47 +1,8 @@
-import { useEffect, useState } from "react";
+import { useContext } from "react";
+import { CartContext } from "../context/CartContext";
 
 export default function CartPage() {
-  const [cart, setCart] = useState([]);
-
-  useEffect(() => {
-    const savedCart = JSON.parse(localStorage.getItem("cart")) || [];
-    setCart(savedCart);
-  }, []);
-
-  const removeFromCart = (id) => {
-    const updated = cart.filter((item) => item._id !== id);
-    setCart(updated);
-    localStorage.setItem("cart", JSON.stringify(updated));
-  };
-
-  const updateQuantity = (id, type) => {
-    const updated = cart.map((item) => {
-      if (item._id === id) {
-        let newQty =
-          type === "inc"
-            ? item.quantity + 1
-            : item.quantity - 1;
-
-        // ⛔ ما يفوتش الكمية المتوفرة
-        if (type === "inc" && newQty > item.stock) {
-          alert(`🚫 Only ${item.stock} units available`);
-          newQty = item.stock;
-        }
-
-        // ✅ إذا نقص حتى 0 → نحيدوه
-        if (type === "dec" && newQty < 1) {
-          return null;
-        }
-
-        return { ...item, quantity: newQty };
-      }
-      return item;
-    });
-
-    const filtered = updated.filter(Boolean); // نحيد nulls
-    setCart(filtered);
-    localStorage.setItem("cart", JSON.stringify(filtered));
-  };
+  const { cart, removeFromCart, updateQuantity } = useContext(CartContext);
 
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
@@ -69,22 +30,11 @@ export default function CartPage() {
               <div>
                 <h4>{item.name}</h4>
                 <p>Price: {item.price} MAD</p>
-                <p>Stock Available: {item.stock}</p>
                 <p>
                   Quantity:
-                  <button
-                    onClick={() => updateQuantity(item._id, "dec")}
-                    style={{ margin: "0 5px" }}
-                  >
-                    -
-                  </button>
-                  <strong>{item.quantity}</strong>
-                  <button
-                    onClick={() => updateQuantity(item._id, "inc")}
-                    style={{ margin: "0 5px" }}
-                  >
-                    +
-                  </button>
+                  <button onClick={() => updateQuantity(item._id, item.quantity - 1)}>-</button>
+                  <b style={{ margin: "0 10px" }}>{item.quantity}</b>
+                  <button onClick={() => updateQuantity(item._id, item.quantity + 1)}>+</button>
                 </p>
               </div>
               <button
