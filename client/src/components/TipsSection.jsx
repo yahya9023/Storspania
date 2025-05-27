@@ -29,7 +29,7 @@ function TipsSection() {
   return (
     <section className="container py-5">
       <h2 className="mb-4 text-center fw-bold" style={{ fontSize: "2rem", color: "#343a40" }}>
-        نصائح ومقالات
+         مقالات
       </h2>
       <div className="row g-4">
         {articles.map(({ _id, title, content, images }) => (
