@@ -5,6 +5,9 @@ import cors from 'cors';
 import authRoutes from "./routes/authRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
+import orderRoutes from './routes/orderRoutes.js';
+import reviewRoutes from './routes/reviewRoutes.js';
+import articleRoutes from "./routes/articleRoutes.js";
 
 
 dotenv.config();
@@ -20,6 +23,9 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/categories", categoryRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/reviews', reviewRoutes);
+app.use("/api/articles", articleRoutes);
 
 app.use(express.urlencoded({ extended: true }));
 

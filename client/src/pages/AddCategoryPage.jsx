@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 export default function AddCategoryPage() {
   const [name, setName] = useState("");
   const [categories, setCategories] = useState([]);
-  const [editingId, setEditingId] = useState(null); // ✅ لمعرفة واش كنعدل
+  const [editingId, setEditingId] = useState(null);
 
   useEffect(() => {
     fetchCategories();
@@ -69,43 +69,44 @@ export default function AddCategoryPage() {
   };
 
   return (
-    <div style={{ padding: 20 }}>
-      <h2>{editingId ? "✏️ Edit Category" : "➕ Add Category"}</h2>
-      <form onSubmit={handleSubmit} style={{ display: "flex", gap: 10 }}>
+    <div className="container py-4">
+      <h2 className="mb-4">{editingId ? "✏️ Edit Category" : "➕ Add Category"}</h2>
+
+      <form onSubmit={handleSubmit} className="d-flex gap-2 mb-4">
         <input
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Category name"
           required
+          className="form-control"
         />
-        <button type="submit">{editingId ? "💾 Update" : "Add"}</button>
+        <button type="submit" className={`btn ${editingId ? "btn-success" : "btn-primary"}`}>
+          {editingId ? "💾 Update" : "Add"}
+        </button>
       </form>
 
-      <hr style={{ margin: "30px 0" }} />
+      <hr />
 
-      <h3>📁 Existing Categories</h3>
+      <h3 className="mb-3">📁 Existing Categories</h3>
       {categories.length === 0 ? (
         <p>No categories available.</p>
       ) : (
-        <ul style={{ padding: 0, listStyle: "none" }}>
+        <ul className="list-group">
           {categories.map((c) => (
             <li
               key={c._id}
-              style={{
-                marginBottom: 10,
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                border: "1px solid #ccc",
-                padding: "8px 12px",
-                borderRadius: 6,
-              }}
+              className="list-group-item d-flex justify-content-between align-items-center"
             >
-              <span>{c.name}</span>
-              <div style={{ display: "flex", gap: 10 }}>
-                <button onClick={() => handleEdit(c)}>✏️ Edit</button>
-                <button onClick={() => handleDelete(c._id)} style={{ backgroundColor: "red", color: "white" }}>
+              <span className="fw-bold">{c.name}</span>
+              <div className="btn-group btn-group-sm" role="group" aria-label="Category actions">
+                <button onClick={() => handleEdit(c)} className="btn btn-outline-primary">
+                  ✏️ Edit
+                </button>
+                <button
+                  onClick={() => handleDelete(c._id)}
+                  className="btn btn-outline-danger"
+                >
                   🗑️ Delete
                 </button>
               </div>

@@ -1,14 +1,14 @@
 import { useState, useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext"; // ✅ context
+import { AuthContext } from "../context/AuthContext"; 
 import { toast } from "react-toastify";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext); // ✅ استخدام login من context
+  const { login } = useContext(AuthContext);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -21,12 +21,10 @@ export default function LoginPage() {
 
       const decoded = JSON.parse(atob(res.data.token.split('.')[1]));
 
-      // ✅ خزّن info فـ context
-      login(res.data.token, decoded.role);
+      login(res.data.token, decoded.role, res.data.user.id);
 
       toast.success("✅ Logged in successfully");
 
-      // ✅ تحويل حسب الدور
       if (decoded.role === "admin") {
         navigate("/add-product");
       } else {
@@ -38,12 +36,13 @@ export default function LoginPage() {
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: "auto", padding: 20 }}>
-      <h2>🔐 Login</h2>
-      <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: 15 }}>
+    <div className="container mt-5" style={{ maxWidth: 400 }}>
+      <h2 className="mb-4 text-center">🔐 Login</h2>
+      <form onSubmit={handleLogin} className="d-flex flex-column gap-3">
         <input
           type="email"
           placeholder="Email"
+          className="form-control"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -51,11 +50,14 @@ export default function LoginPage() {
         <input
           type="password"
           placeholder="Mot de passe"
+          className="form-control"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit">Login</button>
+        <button type="submit" className="btn btn-primary">
+          Login
+        </button>
       </form>
     </div>
   );

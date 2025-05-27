@@ -95,7 +95,7 @@ export default function AddProductPage() {
       description: product.description,
       price: product.price,
       stock: product.stock,
-      category: product.category || "",
+      category: product.category?._id || product.category || "",
     });
     setEditingId(product._id);
     setExistingImages(product.images || []);
@@ -109,88 +109,154 @@ export default function AddProductPage() {
     }
   };
 
-  return (
-    <div style={{ padding: 20 }}>
-      <h2>{editingId ? "✏️ Edit Product" : "➕ Add Product"}</h2>
-      <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 10, maxWidth: 400 }}>
-        <input name="name" placeholder="Product Name" value={form.name} onChange={handleChange} required />
-        <textarea name="description" placeholder="Description" value={form.description} onChange={handleChange} />
-        <input name="price" type="number" placeholder="Price" value={form.price} onChange={handleChange} required />
-        <input name="stock" type="number" placeholder="Stock" value={form.stock} onChange={handleChange} required />
+  const getCategoryName = (id) => {
+    const cat = categories.find((c) => c._id === id);
+    return cat ? cat.name : "N/A";
+  };
 
-        <select name="category" value={form.category} onChange={handleChange} required>
+  return (
+    <div className="container py-4">
+      <h2 className="mb-4">{editingId ? "✏️ Edit Product" : "➕ Add Product"}</h2>
+      <form onSubmit={handleSubmit} className="d-flex flex-column gap-3" style={{ maxWidth: 500 }}>
+        <input
+          name="name"
+          placeholder="Product Name"
+          value={form.name}
+          onChange={handleChange}
+          required
+          className="form-control"
+        />
+        <textarea
+          name="description"
+          placeholder="Description"
+          value={form.description}
+          onChange={handleChange}
+          className="form-control"
+          rows={3}
+        />
+        <input
+          name="price"
+          type="number"
+          placeholder="Price"
+          value={form.price}
+          onChange={handleChange}
+          required
+          className="form-control"
+        />
+        <input
+          name="stock"
+          type="number"
+          placeholder="Stock"
+          value={form.stock}
+          onChange={handleChange}
+          required
+          className="form-control"
+        />
+
+        <select
+          name="category"
+          value={form.category}
+          onChange={handleChange}
+          required
+          className="form-select"
+        >
           <option value="">-- Select Category --</option>
           {categories.map((cat) => (
-            <option key={cat._id} value={cat.name}>
+            <option key={cat._id} value={cat._id}>
               {cat.name}
             </option>
           ))}
         </select>
 
-        <input type="file" name="images" multiple accept="image/*" onChange={handleImageChange} />
+        <input
+          type="file"
+          name="images"
+          multiple
+          accept="image/*"
+          onChange={handleImageChange}
+          className="form-control"
+        />
 
-        <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+        <div className="d-flex flex-wrap gap-2 mt-2">
           {existingImages.map((url, i) => (
-            <div key={i} style={{ position: "relative" }}>
-              <img src={url} alt={`existing-${i}`} style={{ width: 100, height: 100, objectFit: "cover", borderRadius: 5 }} />
+            <div key={i} className="position-relative" style={{ width: 100, height: 100 }}>
+              <img
+                src={url}
+                alt={`existing-${i}`}
+                className="img-thumbnail rounded"
+                style={{ objectFit: "cover", width: "100%", height: "100%" }}
+              />
               <button
                 type="button"
                 onClick={() => handleRemoveExistingImage(url)}
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  right: 0,
-                  background: "red",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "0 5px 0 5px",
-                  cursor: "pointer",
-                  padding: "2px 6px",
-                }}
+                className="btn btn-sm btn-danger position-absolute top-0 end-0"
+                style={{ borderRadius: "0 0.25rem 0 0.25rem" }}
               >
                 ✖
               </button>
             </div>
           ))}
           {previewUrls.map((url, i) => (
-            <img key={i} src={url} alt={`preview-${i}`} style={{ width: 100, height: 100, objectFit: "cover", borderRadius: 5 }} />
+            <img
+              key={i}
+              src={url}
+              alt={`preview-${i}`}
+              className="img-thumbnail rounded"
+              style={{ width: 100, height: 100, objectFit: "cover" }}
+            />
           ))}
         </div>
 
-        <button type="submit">{editingId ? "💾 Update" : "➕ Add"}</button>
+        <button type="submit" className="btn btn-primary mt-3">
+          {editingId ? "💾 Update" : "➕ Add"}
+        </button>
       </form>
 
-      <hr style={{ margin: "30px 0" }} />
+      <hr className="my-5" />
 
       <h3>📦 Product List</h3>
       {products.length === 0 ? (
         <p>No products available.</p>
       ) : (
-        <ul style={{ listStyle: "none", padding: 0 }}>
+        <ul className="list-unstyled">
           {products.map((p) => (
-            <li key={p._id} style={{ marginBottom: 15, border: "1px solid #ccc", borderRadius: 8, padding: 10 }}>
+            <li
+              key={p._id}
+              className="mb-3 border rounded p-3 shadow-sm"
+            >
               <div>
                 <b>{p.name}</b> — {p.price} MAD — Stock: {p.stock}
               </div>
               <div>{p.description}</div>
-              <div><b>Category:</b> {p.category || "N/A"}</div>
+              <div><b>Category:</b> {getCategoryName(p.category)}</div>
 
               {Array.isArray(p.images) && p.images.length > 0 && (
-                <div style={{ display: "flex", gap: 10, marginTop: 5 }}>
+                <div className="d-flex gap-2 mt-2 flex-wrap">
                   {p.images.map((img, i) => (
                     <img
                       key={i}
                       src={img}
                       alt={p.name}
-                      style={{ width: 100, height: 100, objectFit: "cover", borderRadius: 5 }}
+                      className="img-thumbnail rounded"
+                      style={{ width: 100, height: 100, objectFit: "cover" }}
                     />
                   ))}
                 </div>
               )}
 
-              <div style={{ marginTop: 10 }}>
-                <button onClick={() => handleEdit(p)} style={{ marginRight: 10 }}>✏️ Edit</button>
-                <button onClick={() => handleDelete(p._id)} style={{ backgroundColor: "red", color: "white" }}>🗑️ Delete</button>
+              <div className="mt-3">
+                <button
+                  onClick={() => handleEdit(p)}
+                  className="btn btn-sm btn-warning me-2"
+                >
+                  ✏️ Edit
+                </button>
+                <button
+                  onClick={() => handleDelete(p._id)}
+                  className="btn btn-sm btn-danger"
+                >
+                  🗑️ Delete
+                </button>
               </div>
             </li>
           ))}

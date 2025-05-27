@@ -4,6 +4,7 @@ import {
   getProducts,
   updateProduct,
   deleteProduct,
+  getProductById,
 } from "../controllers/productController.js";
 import { protect, isAdmin } from "../middleware/authMiddleware.js";
 import upload from "../utils/multer.js"; // ✅ رفع الصور
@@ -12,6 +13,7 @@ const router = express.Router();
 
 // ✅ Routes ديال المنتجات
 router.get("/", getProducts);
+router.get("/:id", getProductById);
 router.post(
   "/",
   protect,

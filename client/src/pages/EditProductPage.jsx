@@ -13,43 +13,40 @@ export default function EditProductPage() {
     description: "",
     price: "",
     stock: "",
-    category: "", // ✅ إضافة خانة التصنيف
+    category: "",
   });
 
-  const [categories, setCategories] = useState([]); // ✅ كل التصنيفات
+  const [categories, setCategories] = useState([]);
   const [existingImages, setExistingImages] = useState([]);
   const [newImages, setNewImages] = useState([]);
   const [previewUrls, setPreviewUrls] = useState([]);
 
   useEffect(() => {
-    fetchProduct();
-    fetchCategories();
-  }, []);
+    const loadData = async () => {
+      try {
+        const all = await getProducts();
+        const product = all.data.find((p) => p._id === id);
+        if (!product) return toast.error("❌ Product not found");
 
-  const fetchCategories = async () => {
-    try {
-      const res = await axios.get("http://localhost:5000/api/categories");
-      setCategories(res.data);
-    } catch (err) {
-      toast.error("❌ Failed to load categories");
-    }
-  };
+        setForm({
+          name: product.name,
+          description: product.description,
+          price: product.price,
+          stock: product.stock,
+          category: product.category?._id || product.category || "",
+        });
 
-  const fetchProduct = async () => {
-    const all = await getProducts();
-    const product = all.data.find((p) => p._id === id);
-    if (!product) return toast.error("❌ Product not found");
+        setExistingImages(product.images || []);
 
-    setForm({
-      name: product.name,
-      description: product.description,
-      price: product.price,
-      stock: product.stock,
-      category: product.category || "", // ✅ قراءة التصنيف
-    });
+        const res = await axios.get("http://localhost:5000/api/categories");
+        setCategories(res.data);
+      } catch (err) {
+        toast.error("❌ Failed to load product or categories");
+      }
+    };
 
-    setExistingImages(product.images || []);
-  };
+    loadData();
+  }, [id]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -94,16 +91,45 @@ export default function EditProductPage() {
         onSubmit={handleSubmit}
         style={{ display: "flex", flexDirection: "column", gap: 10, maxWidth: 400 }}
       >
-        <input name="name" value={form.name} onChange={handleChange} placeholder="Name" required />
-        <textarea name="description" value={form.description} onChange={handleChange} placeholder="Description" />
-        <input name="price" value={form.price} onChange={handleChange} type="number" placeholder="Price" required />
-        <input name="stock" value={form.stock} onChange={handleChange} type="number" placeholder="Stock" required />
+        <input
+          name="name"
+          value={form.name}
+          onChange={handleChange}
+          placeholder="Name"
+          required
+        />
+        <textarea
+          name="description"
+          value={form.description}
+          onChange={handleChange}
+          placeholder="Description"
+        />
+        <input
+          name="price"
+          value={form.price}
+          onChange={handleChange}
+          type="number"
+          placeholder="Price"
+          required
+        />
+        <input
+          name="stock"
+          value={form.stock}
+          onChange={handleChange}
+          type="number"
+          placeholder="Stock"
+          required
+        />
 
-        {/* ✅ اختيار التصنيف */}
-        <select name="category" value={form.category} onChange={handleChange} required>
+        <select
+          name="category"
+          value={form.category}
+          onChange={handleChange}
+          required
+        >
           <option value="">-- Select Category --</option>
           {categories.map((cat) => (
-            <option key={cat._id} value={cat.name}>
+            <option key={cat._id} value={cat._id}>
               {cat.name}
             </option>
           ))}
