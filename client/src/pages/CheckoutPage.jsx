@@ -49,7 +49,7 @@ export default function CheckoutPage() {
       };
 
       await axios.post(
-        "http://localhost:5000/api/orders", 
+        "http://spaniastore.com/api/orders", 
         orderData,
         {
           headers: {

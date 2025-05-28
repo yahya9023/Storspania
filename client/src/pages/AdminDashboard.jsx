@@ -14,7 +14,7 @@ export default function AdminDashboard() {
 
   const fetchProducts = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/products");
+      const res = await axios.get("http://spaniastore.com/api/products");
       setProducts(res.data);
     } catch (err) {
       toast.success("❌ Failed to fetch products");
@@ -25,7 +25,7 @@ export default function AdminDashboard() {
     if (!window.confirm("Are you sure you want to delete this product?")) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/products/${id}`, {
+      await axios.delete(`http://spaniastore.com/api/products/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchProducts();

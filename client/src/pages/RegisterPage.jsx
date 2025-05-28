@@ -19,7 +19,7 @@ export default function RegisterPage() {
     e.preventDefault();
 
     try {
-      await axios.post("http://localhost:5000/api/auth/register", form);
+      await axios.post("http://spaniastore.com/api/auth/register", form);
       toast.success("✅ Account created! You can now log in.");
       navigate("/login");
     } catch (err) {

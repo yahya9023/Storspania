@@ -16,7 +16,7 @@ export default function AdminOrdersPage() {
   const fetchOrders = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.get("http://localhost:5000/api/orders/all", {
+      const res = await axios.get("http://spaniastore.com/api/orders/all", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setOrders(res.data);
@@ -28,7 +28,7 @@ export default function AdminOrdersPage() {
   const markAsDelivered = async (id) => {
     try {
       const token = localStorage.getItem("token");
-      await axios.put(`http://localhost:5000/api/orders/${id}/deliver`, {}, {
+      await axios.put(`http://spaniastore.com/api/orders/${id}/deliver`, {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success("📦 Marked as delivered");

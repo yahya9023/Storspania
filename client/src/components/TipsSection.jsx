@@ -10,7 +10,7 @@ function TipsSection() {
     // استرجاع المقالات من API عند تحميل الصفحة
     const fetchArticles = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/articles");  // رابط API لجلب المقالات
+        const response = await axios.get("http://spaniastore.com/api/articles");  // رابط API لجلب المقالات
         setArticles(response.data);  // تخزين المقالات في الحالة
         setLoading(false);  // إيقاف التحميل
       } catch (error) {

@@ -13,7 +13,7 @@ export default function AdminDashboardPage() {
   const fetchOrders = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.get("http://localhost:5000/api/orders/all", {
+      const res = await axios.get("http://spaniastore.com/api/orders/all", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setOrders(res.data);

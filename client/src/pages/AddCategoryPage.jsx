@@ -13,7 +13,7 @@ export default function AddCategoryPage() {
 
   const fetchCategories = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/categories");
+      const res = await axios.get("http://spaniastore.com/api/categories");
       setCategories(res.data);
     } catch (err) {
       toast.error("❌ Failed to load categories");
@@ -32,10 +32,10 @@ export default function AddCategoryPage() {
       };
 
       if (editingId) {
-        await axios.put(`http://localhost:5000/api/categories/${editingId}`, { name }, config);
+        await axios.put(`http://spaniastore.com/api/categories/${editingId}`, { name }, config);
         toast.success("✅ Category updated");
       } else {
-        await axios.post("http://localhost:5000/api/categories", { name }, config);
+        await axios.post("http://spaniastore.com/api/categories", { name }, config);
         toast.success("✅ Category added");
       }
 
@@ -56,7 +56,7 @@ export default function AddCategoryPage() {
     if (!window.confirm("⚠️ Are you sure you want to delete this category?")) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/categories/${id}`, {
+      await axios.delete(`http://spaniastore.com/api/categories/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },

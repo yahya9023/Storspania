@@ -16,7 +16,7 @@ export const sendVerificationEmail = async (to, token) => {
       from: process.env.EMAIL_USER,  // من البريد الإلكتروني الذي سترسل منه
       to,  // إلى البريد الإلكتروني للمستقبل
       subject: "Please verify your email address",  // موضوع البريد الإلكتروني
-      text: `Click the link to verify your email: http://localhost:5000/verify/${token}`,  // نص البريد الإلكتروني
+      text: `Click the link to verify your email: http://spaniastore.com/verify/${token}`,  // نص البريد الإلكتروني
     };
 
     // إرسال البريد الإلكتروني

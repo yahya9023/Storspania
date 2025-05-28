@@ -12,7 +12,7 @@ export default function OrdersPage() {
   const fetchOrders = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.get("http://localhost:5000/api/orders/my", {
+      const res = await axios.get("http://spaniastore.com/api/orders/my", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

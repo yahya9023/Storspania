@@ -11,7 +11,7 @@ function ArticlePage() {
     // جلب المقال من API بناءً على ID
     const fetchArticle = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/articles/${id}`);
+        const response = await axios.get(`http://spaniastore.com/api/articles/${id}`);
         setArticle(response.data);  // تخزين المقال في الحالة
         setLoading(false);
       } catch (error) {
