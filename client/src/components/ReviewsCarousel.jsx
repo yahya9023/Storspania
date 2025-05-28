@@ -23,7 +23,7 @@ export default function ReviewsCarousel() {
 
   return (
     <section className="my-4 container px-3">
-      <h2 className="mb-4 text-center fw-bold text-dark" style={{ fontSize: '1.75rem' }}>💬 آراء العملاء</h2>
+      <h2 className="mb-4 text-center fw-bold text-dark" style={{ fontSize: '1.75rem' }}> آراء العملاء</h2>
       {reviews.length === 0 ? (
         <p className="text-center text-secondary">لا توجد آراء لعرضها حالياً.</p>
       ) : (
