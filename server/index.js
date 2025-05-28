@@ -35,5 +35,11 @@ app.use(express.urlencoded({ extended: true }));
 
 
 const PORT = process.env.PORT || 5000;
+app._router.stack.forEach((r) => {
+  if (r.route && r.route.path) {
+    console.log("📌 Route loaded:", r.route.path);
+  }
+});
+
 app.listen(PORT, '0.0.0.0', () => console.log(`🚀 Server running on port ${PORT}`));
 

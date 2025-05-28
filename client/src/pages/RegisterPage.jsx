@@ -15,17 +15,20 @@ export default function RegisterPage() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
+const handleRegister = async (e) => {
+  e.preventDefault();
 
-    try {
-      await axios.post("http://spaniastore.com/api/auth/register", form);
-      toast.success("✅ Account created! You can now log in.");
-      navigate("/login");
-    } catch (err) {
-      toast.error("❌ Register failed: " + (err.response?.data?.msg || err.message));
-    }
-  };
+  try {
+    await axios.post("http://spaniastore.com/api/auth/register", form, {
+      withCredentials: true,
+    });
+    toast.success("✅ Account created! You can now log in.");
+    navigate("/login");
+  } catch (err) {
+    toast.error("❌ Register failed: " + (err.response?.data?.msg || err.message));
+  }
+};
+
 
   return (
     <div className="container" style={{ maxWidth: 400, marginTop: "50px" }}>
